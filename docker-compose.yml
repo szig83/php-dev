@@ -1,0 +1,52 @@
+services:
+  php:
+    build:
+      context: .
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4}
+    container_name: php_dev
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "8080:80"
+      - "9003:9003"
+    environment:
+      - PHP_IDE_CONFIG=serverName=php_dev
+    depends_on:
+      - postgres
+      - keydb
+    networks:
+      - php_dev_network
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_dev
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: app
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - php_dev_network
+
+  keydb:
+    image: eqalpha/keydb:latest
+    container_name: keydb_dev
+    command: keydb-server --port 6379
+    volumes:
+      - keydb_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - php_dev_network
+
+volumes:
+  postgres_data:
+  keydb_data:
+
+networks:
+  php_dev_network:
+    driver: bridge

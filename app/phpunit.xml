@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheResult="false">
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_CONNECTION" value="pgsql"/>
+        <env name="DB_HOST" value="postgres_dev"/>
+        <env name="DB_PORT" value="5432"/>
+        <env name="DB_DATABASE" value="app"/>
+        <env name="DB_USERNAME" value="appuser"/>
+        <env name="DB_PASSWORD" value="apppass"/>
+        <env name="CACHE_HOST" value="keydb_dev"/>
+        <env name="CACHE_PORT" value="6379"/>
+    </php>
+</phpunit>

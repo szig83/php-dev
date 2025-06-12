@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Standard">
+    <description>Custom standard based on PSR2 with Squiz commenting, custom class naming, and 120 char line length.</description>
+    <arg name="colors"/>
+    <arg name="parallel" value="10"/>
+    <arg name="extensions" value="php"/>
+
+    <!-- Include the PSR2 standard -->
+    <rule ref="PSR2"/>
+
+    <!-- Custom line length (120 characters soft limit) -->
+    <!-- This overrides any line length settings potentially inherited or implied by PSR2 -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/> <!-- 0 means no hard limit, only warnings for lines > 120 -->
+        </properties>
+    </rule>
+
+    <!-- Squiz commenting rules -->
+    <rule ref="Squiz.Commenting.ClassComment"/>
+    <rule ref="Squiz.Commenting.FunctionComment"/>
+    <rule ref="Squiz.Commenting.VariableComment"/>
+
+    <!-- Custom class name validation (allowing non-CamelCaps for specific cases if needed) -->
+    <rule ref="Squiz.Classes.ValidClassName">
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
+    </rule>
+
+    <!-- Enforce short array syntax [] -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+</ruleset>
