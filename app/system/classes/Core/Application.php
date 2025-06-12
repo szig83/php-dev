@@ -5,8 +5,8 @@ namespace App\Core;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Monolog\Handler\ErrorLogHandler;
-use Monolog\Handler\SlackWebhookHandler;
+#use Monolog\Handler\ErrorLogHandler;
+#use Monolog\Handler\SlackWebhookHandler;
 use Monolog\Processor\WebProcessor;
 use Monolog\Processor\MemoryUsageProcessor;
 
@@ -35,6 +35,10 @@ class Application
         $this->initializeLogger();
     }
 
+    /**
+     * Naplózás inicializáció
+     * @return void
+     */
     private function initializeLogger(): void
     {
         // Logger létrehozása az alkalmazás nevével

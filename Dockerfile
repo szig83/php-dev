@@ -35,7 +35,8 @@ RUN pecl install xdebug \
 
 # PHP CodeSniffer és PHPUnit telepítése Composerrel globálisan
 RUN composer global require squizlabs/php_codesniffer \
-    && composer global require phpunit/phpunit
+    && composer global require phpunit/phpunit \
+    && composer global require vimeo/psalm
 
 # Nginx konfiguráció másolása
 COPY nginx.conf /etc/nginx/nginx.conf

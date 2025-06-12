@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="3"
+    phpVersion="8.4"
+    threads="4"
+    strictBinaryOperands="true"
+    totallyTyped="false"
+>
+    <projectFiles>
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="tests" />
+        </ignoreFiles>
+    </projectFiles>
+    <autoloadFiles>
+        <file name="vendor/autoload.php" />
+    </autoloadFiles>
+    <issueHandlers>
+        <MissingReturnType errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

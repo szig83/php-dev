@@ -9,6 +9,7 @@ $app = new App\Core\Application('public');
 
 $app->logger->info('Application is running');
 
+
 echo '<pre>';
 print_r($app->config->getAll());
 echo '</pre>';
