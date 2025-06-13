@@ -1,15 +1,24 @@
 <?php
-phpinfo();
 require_once __DIR__ . '/../vendor/autoload.php';
 
-#require_once __DIR__.'/../system/classes/core/Autoloader.php';
-#spl_autoload_register('core\Autoloader::loader');
+$app = new App\Core\Application(Enum\Context::PUBLIC);
 
-$app = new App\Core\Application('public');
+echo $app->render();
 
-$app->logger->info('Application is running');
+/*
+$app->logger->error('Ajjaj');
+$app->logger->warning('warning');
+$app->logger->info('info');
+$app->logger->notice('notice');
+$app->logger->debug('debug');
+
+*/
 
 
+
+
+/*
 echo '<pre>';
 print_r($app->config->getAll());
 echo '</pre>';
+*/

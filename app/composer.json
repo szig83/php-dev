@@ -1,7 +1,10 @@
 {
   "autoload": {
     "psr-4": {
-      "App\\": "system/classes/"
+      "App\\": "system/class/",
+      "Enum\\": "system/enum/",
+      "Interface\\": "system/interface/",
+      "Middleware\\": "system/middleware/"
     }
   },
   "require": {

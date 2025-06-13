@@ -48,6 +48,21 @@ COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 # PHP-FPM konfiguráció testreszabása
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
+# Log mappák létrehozása
+RUN mkdir -p /var/www/html/system_log/php
+RUN mkdir -p /var/www/html/system_log/xdebug
+
+# PHP hibajelentés konfigurálása
+RUN echo "error_log = /var/www/html/system_log/php/error.log" > /usr/local/etc/php/conf.d/error-log.ini
+RUN echo "log_errors = On" >> /usr/local/etc/php/conf.d/error-log.ini
+RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/error-log.ini
+RUN echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/error-log.ini
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/error-log.ini
+
+# Log mappa jogosultságok beállítása
+RUN chown -R www-data:www-data /var/www/html/system_log
+RUN chmod -R 755 /var/www/html/system_log
+
 # Munkakönyvtár beállítása
 WORKDIR /var/www/html
 

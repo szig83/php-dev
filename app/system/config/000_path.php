@@ -19,8 +19,8 @@ return [
         'app' => $appRoot,
         'cache' => $appRoot . DIRECTORY_SEPARATOR . 'system_cache',
         'document' => $documentRoot,
-        'log' => $appRoot . DIRECTORY_SEPARATOR . 'system_log',
+        'log' => $appRoot . DIRECTORY_SEPARATOR . 'system_log' . DIRECTORY_SEPARATOR . 'app',
         'temp' => $appRoot . DIRECTORY_SEPARATOR . 'system_temp',
         'upload' => $appRoot . DIRECTORY_SEPARATOR . 'system_upload'
-    ],
+    ]
 ];

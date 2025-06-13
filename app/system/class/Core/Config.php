@@ -2,7 +2,8 @@
 
 namespace App\Core;
 
-use Database;
+use App\Core\Database;
+use Enum\Context;
 
 class Config
 {
@@ -23,6 +24,8 @@ class Config
         $this->setConfigPath();
         $this->loadEnvironment();
         $this->loadConfigFiles();
+        $this->addExtraConfig();
+        $this->cleanConfig();
     }
 
     /**
@@ -268,5 +271,42 @@ class Config
     public function __wakeup()
     {
         throw new \Exception('Cannot unserialize singleton');
+    }
+
+    private function addExtraConfig()
+    {
+        $this->config['app']['context'] = $this->defaultContext;
+
+        $this->config['log']['path']['root'] = $this->get('path.server.log') . DIRECTORY_SEPARATOR . $this->defaultContext;
+        $this->config['log']['path']['error'] = $this->get('log.path.root') . DIRECTORY_SEPARATOR . $this->get('filename.log.error');
+        $this->config['log']['path']['debug'] = $this->get('log.path.root') . DIRECTORY_SEPARATOR . $this->get('filename.log.debug');
+        $this->config['log']['path']['info'] = $this->get('log.path.root') . DIRECTORY_SEPARATOR . $this->get('filename.log.info');
+        $this->config['log']['path']['warning'] = $this->get('log.path.root') . DIRECTORY_SEPARATOR . $this->get('filename.log.warning');
+    }
+
+    /**
+     * Konfigurációs tömb tisztítása/véglegesítése.
+     * Csak a kontextusra vonatkozó beállítások maradnak benne.
+     * @return void
+     */
+    private function cleanConfig(): void
+    {
+        // Az enum összes lehetséges értékének lekérése
+        $contextValues = array_column(Context::cases(), 'value');
+        
+        // Végigmegyünk a konfigurációs tömb csoportjain
+        foreach ($this->config as $groupKey => &$group) {
+            if (!is_array($group)) {
+                continue; // Ha nem tömb, kihagyjuk
+            }
+
+            // Végigmegyünk a csoport elemein
+            foreach ($group as $key => $value) {
+                // Ha a kulcs egy kontextus érték és nem a kívánt kontextus, töröljük
+                if (in_array($key, $contextValues) && $key !== $this->defaultContext) {
+                    unset($group[$key]);
+                }
+            }
+        }
     }
 }
