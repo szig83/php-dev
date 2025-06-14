@@ -1,16 +1,9 @@
 <?php
 return [
-    'app' => [
-        'debug' => true,
-        'public' => [
-            'debug' => true,
-            'theme' => 'dev-theme',
-        ],
-        'admin' => [
-            'debug' => true,
-        ],
+    /*'app' => [
+        'debug' => true
     ],
-    /*'database' => [
+    'database' => [
         'public' => [
             'database' => 'mydb_dev_public',
         ],

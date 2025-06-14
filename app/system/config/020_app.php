@@ -7,12 +7,10 @@ return [
     // Felület-specifikus beállítások
     'public' => [
         'name' => 'MyApp Public',
-        'debug' => true,
         'theme' => 'default',
     ],
     'admin' => [
         'name' => 'MyApp Admin',
-        'debug' => false,
         'theme' => 'admin-dark',
     ],
 ];

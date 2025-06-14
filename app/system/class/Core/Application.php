@@ -5,6 +5,7 @@ namespace App\Core;
 use Monolog\Logger;
 use Enum\Context;
 use Middleware\Header;
+use Interface\MiddlewareInterface;
 
 /**
  * Az alkalmazás alap osztálya
@@ -21,6 +22,8 @@ class Application
      */
     public Logger $logger;
 
+    public Theme $theme;
+
     /**
      * @var Router Az alkalmazás router osztálya.
      */
@@ -29,7 +32,12 @@ class Application
     /**
      * @var Middleware A middleware pipeline.
      */
-    private Middleware $pipeline;
+    public Middleware $pipeline;
+
+    /**
+     * @var Debugger Az alkalmazás debugger osztálya.
+     */
+    public Debugger $debugger;
 
     /**
      * Osztály konstruktor
@@ -37,12 +45,17 @@ class Application
      */
     public function __construct(?Context $context = null)
     {
+        unset($_SESSION['executionTime']);
         $this->pipeline = new Middleware();
         $this->pipeline->add(new Header());
         $this->setErrorHandler();
         $this->config = Config::getInstance($context->value);
         $this->logger = Log::getInstance($this->config)->logger;
+        $this->theme = new Theme($this->config);
         $this->router = new Router($this->config);
+        if ($this->config->get('app.debug')) {
+            $this->debugger = new Debugger($this);
+        }
     }
 
     /**
@@ -70,6 +83,15 @@ class Application
     }
 
     /**
+     * @param MiddlewareInterface $middleware Hozzáadandó middleware.
+     * @return void
+     */
+    public function addMiddleware(MiddlewareInterface $middleware):void
+    {
+        $this->pipeline->add($middleware);
+    }
+
+    /**
      * Middleware-ek futtatása a kérésen
      * @param mixed    $request A kérés
      * @param callable $core    A core kéréskezelő függvény
@@ -94,7 +116,7 @@ class Application
             ob_end_clean();
             return $content;
         };
-        
+
         return $this->runMiddlewares($request, $coreRenderer);
     }
 }

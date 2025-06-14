@@ -7,7 +7,7 @@ use Closure;
 /**
  * Fejléc köztes réteg
  */
-class Header implements MiddlewareInterface
+class Auth implements MiddlewareInterface
 {
     /**
      * @param mixed   $request Kérés.
@@ -17,8 +17,12 @@ class Header implements MiddlewareInterface
     public function handle(mixed $request, Closure $next): mixed
     {
         fileWrite(__CLASS__);
-        header('X-Content-Type-Options: nosniff');
-        header('X-Valami: akarmi');
+        if (!headers_sent()) {
+            header('Location: /');
+            exit();
+        }else {
+            echo 'Headers already sent';
+        }
         return $next($request);
     }
 }

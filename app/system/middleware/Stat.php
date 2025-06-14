@@ -7,7 +7,7 @@ use Closure;
 /**
  * Fejléc köztes réteg
  */
-class Header implements MiddlewareInterface
+class Stat implements MiddlewareInterface
 {
     /**
      * @param mixed   $request Kérés.
@@ -17,8 +17,17 @@ class Header implements MiddlewareInterface
     public function handle(mixed $request, Closure $next): mixed
     {
         fileWrite(__CLASS__);
-        header('X-Content-Type-Options: nosniff');
-        header('X-Valami: akarmi');
-        return $next($request);
+        $startTime = microtime(true);
+
+        $response = $next($request);
+
+        $endTime = microtime(true);
+        $executionTime = $endTime - $startTime;
+
+        // Mentsük el az executionTime-ot a Request objektumhoz
+        $_SESSION['executionTime'] = $executionTime;
+        return $response;
     }
+
+
 }

@@ -276,6 +276,7 @@ class Config
     private function addExtraConfig()
     {
         $this->config['app']['context'] = $this->defaultContext;
+        $this->config['app']['env'] = getenv('APP_ENV');
 
         $this->config['log']['path']['root'] = $this->get('path.server.log') . DIRECTORY_SEPARATOR . $this->defaultContext;
         $this->config['log']['path']['error'] = $this->get('log.path.root') . DIRECTORY_SEPARATOR . $this->get('filename.log.error');
