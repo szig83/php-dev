@@ -9,7 +9,7 @@ services:
       - ./app:/var/www/html
     ports:
       - "8080:80"
-      - "9003:9003"
+     # - "9003:9003"
     environment:
       - PHP_IDE_CONFIG=serverName=php_dev
     depends_on:

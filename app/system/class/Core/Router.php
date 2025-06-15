@@ -28,6 +28,8 @@ class Router
      */
     private Config $config;
 
+    private array $routeData = [];
+
     /**
      * Router osztály konstruktor
      * @param Config $config Konfiguráció.
@@ -53,6 +55,8 @@ class Router
         }
 
         $this->sanitizeParameters();
+
+        $this->loadRouteData();
     }
 
     /**
@@ -94,6 +98,24 @@ class Router
         $this->postDatas = array_map([$this, 'sanitizeInput'], $this->postDatas);
     }
 
+    public function getRouteData(): array
+    {
+        return $this->routeData;
+    }
+
+    private function loadRouteData(): void
+    {
+        if (false) {
+            header('Location: /404', true, 404);
+            exit;
+        }
+        $this->routeData = [
+            'seoUrl' => $this->getActualPage(),
+            'protected' => false,
+            'title' => 'Valami',
+        ];
+    }
+
     /**
      * Oldal betöltése
      * @return void
@@ -104,7 +126,9 @@ class Router
         if (file_exists($routePath)) {
             require_once $routePath;
         } else {
-            echo '404';
+            if (!empty($this->getActualPage())) {
+                echo '404';
+            }
         }
     }
 }

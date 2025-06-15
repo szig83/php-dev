@@ -2,10 +2,15 @@
 
 namespace App\Core;
 
+use Exception;
+use PDO;
+use PDO\Pgsql;
+use PDOException;
+
 class Database
 {
     private static $instance = null;
-    private $pdo;
+    public $pdo;
     private $host;
     private $dbname;
     private $user;
@@ -27,20 +32,26 @@ class Database
 
     /**
      * Singleton példány lekérése
-     * @param string  $host     Adatbázis kiszolgáló címe
-     * @param string  $dbname   Adatbázis neve
-     * @param string  $user     Felhasználónév
-     * @param string  $password Jelszó
-     * @param integer $port     Portszám (alapértelmezett: 5432)
-     * @return Database
+     * @param string|null $host     Adatbázis kiszolgáló címe.
+     * @param integer     $port     Portszám (alapértelmezett: 5432).
+     * @param string|null $database Adatbázis neve.
+     * @param string|null $username Felhasználónév.
+     * @param string|null $password Jelszó.
+     * @return Database|null
+     * @throws Exception Hibakezelés.
      */
-    public static function getInstance($host = null, $dbname = null, $user = null, $password = null, $port = 5432)
-    {
+    public static function getInstance(
+        ?string $host = null,
+        int $port = 5432,
+        ?string $database = null,
+        ?string $username = null,
+        ?string $password = null
+    ): ?Database {
         if (self::$instance === null) {
-            if ($host === null || $dbname === null || $user === null || $password === null) {
+            if ($host === null || $database === null || $username === null || $password === null) {
                 throw new Exception("Adatbázis konfiguráció megadása szükséges az első inicializáláskor.");
             }
-            self::$instance = new self($host, $dbname, $user, $password, $port);
+            self::$instance = new self($host, $database, $username, $password, $port);
         }
         return self::$instance;
     }
@@ -55,8 +66,9 @@ class Database
     /**
      * Szerializálás tiltása
      */
-    private function __wakeup()
+    public function __wakeup()
     {
+        $this->connect();
     }
 
     /**
@@ -66,8 +78,9 @@ class Database
     private function connect()
     {
         try {
+
             $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->dbname}";
-            $this->pdo = new PDO($dsn, $this->user, $this->password, [
+            $this->pdo = new Pgsql($dsn, $this->user, $this->password, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false
@@ -347,5 +360,3 @@ class Database
         $this->pdo->rollBack();
     }
 }
-
-?><?php

@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 function fileWrite(string $message): void
@@ -10,11 +11,9 @@ function fileWrite(string $message): void
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Middleware\Stat;
 use Middleware\Auth;
 
 $app = new App\Core\Application(Enum\Context::PUBLIC);
-$app->addMiddleware(new Stat());
 $app->addMiddleware(new Auth());
 
 echo $app->render();

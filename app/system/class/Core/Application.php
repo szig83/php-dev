@@ -2,9 +2,11 @@
 
 namespace App\Core;
 
+use Exception;
 use Monolog\Logger;
 use Enum\Context;
 use Middleware\Header;
+use Middleware\Stat;
 use Interface\MiddlewareInterface;
 
 /**
@@ -39,23 +41,32 @@ class Application
      */
     public Debugger $debugger;
 
+    public Database $database;
+
     /**
      * Osztály konstruktor
      * @param Context|null $context Az alkalmazás kontextusa (public, admin, stb.).
+     * @throws Exception Kivétel.
      */
     public function __construct(?Context $context = null)
     {
-        unset($_SESSION['executionTime']);
-        $this->pipeline = new Middleware();
-        $this->pipeline->add(new Header());
         $this->setErrorHandler();
+        unset($_SESSION['executionTime']);
         $this->config = Config::getInstance($context->value);
         $this->logger = Log::getInstance($this->config)->logger;
+
+        $dbConfig = $this->config->get('database');
+
+        $this->database = Database::getInstance(...$dbConfig);
+
         $this->theme = new Theme($this->config);
         $this->router = new Router($this->config);
         if ($this->config->get('app.debug')) {
             $this->debugger = new Debugger($this);
         }
+        $this->pipeline = new Middleware();
+        $this->pipeline->add(new Stat());
+        $this->pipeline->add(new Header());
     }
 
     /**
@@ -116,7 +127,8 @@ class Application
             ob_end_clean();
             return $content;
         };
+        $routeData = $this->router->getRouteData();
 
-        return $this->runMiddlewares($request, $coreRenderer);
+        return $this->runMiddlewares($routeData, $coreRenderer);
     }
 }
