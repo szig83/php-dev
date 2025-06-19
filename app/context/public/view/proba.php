@@ -2,7 +2,7 @@
 
 use App\Core\Database;
 
-fileWrite('page');
+#fileWrite('page');
 echo $this->config->get('app.name');
 
 

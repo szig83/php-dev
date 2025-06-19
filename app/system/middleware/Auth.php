@@ -16,7 +16,7 @@ class Auth implements MiddlewareInterface
      */
     public function handle(mixed $request, Closure $next): mixed
     {
-        fileWrite(__CLASS__);
+        #fileWrite(__CLASS__);
         if ($request['protected']) {
             if (!headers_sent()) {
                 header('Location: /', true, 401);

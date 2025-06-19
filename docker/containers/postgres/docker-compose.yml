@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_dev
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: app
+    volumes:
+      - ../../data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - php_dev_network
+
+#volumes:
+#  postgres_data:
+
+networks:
+  php_dev_network:
+    external: true

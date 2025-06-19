@@ -16,7 +16,7 @@ class Stat implements MiddlewareInterface
      */
     public function handle(mixed $request, Closure $next): mixed
     {
-        fileWrite(__CLASS__);
+        #fileWrite(__CLASS__);
         $startTime = microtime(true);
 
         $response = $next($request);

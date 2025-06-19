@@ -1,0 +1,18 @@
+services:
+  nginx:
+    build:
+      context: .
+    container_name: nginx_dev
+    ports:
+      - "8080:80"
+    volumes:
+      - app_data:/var/www/html
+    networks:
+      - php_dev_network
+
+volumes:
+  app_data:
+
+networks:
+  php_dev_network:
+    external: true

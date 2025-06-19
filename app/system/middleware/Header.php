@@ -16,7 +16,7 @@ class Header implements MiddlewareInterface
      */
     public function handle(mixed $request, Closure $next): mixed
     {
-        fileWrite(__CLASS__);
+        #fileWrite(__CLASS__);
         header('X-Content-Type-Options: nosniff');
         header('X-Valami: akarmi');
         return $next($request);
